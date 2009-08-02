@@ -4,6 +4,8 @@
 PASTE_URL = 'http://paste2.org/new-paste'
 
 def paste(f, lang='text', description='', **kwargs):
+    """The magic of the program that connects to the Paste2 servers and
+    uploads the supplied information, printing to stdout the URL."""
     from urllib2 import Request, build_opener, install_opener, urlopen
     from urllib import urlencode
     postData = urlencode({
@@ -23,6 +25,7 @@ def paste(f, lang='text', description='', **kwargs):
     stdout.write(response.url)
 
 def __usage():
+    """Aides the user along by providing information about how to properly use the paste2upload program."""
     from sys import argv, stdout
     stdout.write("""
     Copyright (c) 2009 Michael Schade. Distributed under the MIT License
@@ -96,6 +99,7 @@ def __usage():
         [file, -],  Pastes supplied text to http://paste2.org/. Specify - for stdin.\n\n""" % argv[0])
 
 def __main(argv):
+    """Handles processing command line arguments and distributing them to the paste function appropriately."""
     from getopt import GetoptError, getopt
     try:
         opts, args = getopt(argv, "hvd:l:", ["help", "description", "language"])
