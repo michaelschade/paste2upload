@@ -11,7 +11,7 @@
     Paste2 is an independent service not provided by Michael Schade.
     No service guarantees can be made on behalf of Paste2 or its
     dependencies by Michael Schade. Any issues, questions, comments,
-    or concers regarding the service should be directed to Paste2 only.
+    or concerns regarding the service should be directed to Paste2 only.
     
     Usage ./paste2.py [-h, --help] [-d, --description] [-l, --language syntax code] [file]:
     
