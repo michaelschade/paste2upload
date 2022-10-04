@@ -1,13 +1,21 @@
 #!/usr/bin/python
-
 # No www. because the Paste2 creator apparently dislikes the subdomain?
-PASTE_URL = 'http://paste2.org/new-paste'
+
+"""Imoporting necessary modules"""
+from sys import stdout,argv,exit,stdin
+from getopt import GetoptError, getopt
+from urllib.request import Request, build_opener, install_opener, urlopen
+from urllib.parse import urlencode
+"""Done"""
+
+PASTE_URL = 'https://paste2.org/new-paste'
 
 def paste(f, lang='text', description='', **kwargs):
+
     """The magic of the program that connects to the Paste2 servers and
     uploads the supplied information, printing to stdout the URL."""
-    from urllib2 import Request, build_opener, install_opener, urlopen
-    from urllib import urlencode
+
+
     postData = urlencode({
         'lang': lang,
         'description': description,
@@ -17,16 +25,18 @@ def paste(f, lang='text', description='', **kwargs):
     headers = {
         'User-Agent': 'Paste2 Uploader/1.4 (Michael Schade)',
     }
-    request = Request(PASTE_URL, postData, headers)
+    EncodePdata = postData.encode('utf-8')
+    request = Request(PASTE_URL, EncodePdata, headers)
     opener = build_opener()
     install_opener(opener)
     response = urlopen(request)
-    from sys import stdout
     stdout.write(response.url)
+
+    
+
 
 def __usage():
     """Aides the user along by providing information about how to properly use the paste2upload program."""
-    from sys import argv, stdout
     stdout.write("""
     Copyright (c) 2009 Michael Schade. Distributed under the MIT License
     For more information see paste2's LICENSE file or visit
@@ -100,18 +110,16 @@ def __usage():
 
 def __main(argv):
     """Handles processing command line arguments and distributing them to the paste function appropriately."""
-    from getopt import GetoptError, getopt
+    
     try:
         opts, args = getopt(argv, "hvd:l:", ["help", "description", "language"])
     except GetoptError:
         __usage()
-        from sys import exit
         exit(0)
     pArgs = {}
     for opt,arg in opts:
         if opt in ("-h", "--help"):
             __usage()
-            from sys import exit
             exit(0)
         elif opt in ("-d", "--description"):
             pArgs['description'] = arg
@@ -121,11 +129,9 @@ def __main(argv):
         f = open(args[0], 'r')
     except IOError:
         if args[0] == '-':
-            from sys import stdin
             paste(stdin, **pArgs)
         else:
-            from sys import stdout
-            stdout.write("Error: Could not locate file.\r\n")
+            stdout.write("Error: Could not locate file\n(for test purpose: try 'python paste2.py -l text test.txt').\r\n")
     except IndexError:
         __usage()
     else:
@@ -133,5 +139,4 @@ def __main(argv):
         f.close()
 
 if __name__ == '__main__':
-    from sys import argv
     __main(argv[1:])
